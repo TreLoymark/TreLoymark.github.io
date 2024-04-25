@@ -16,7 +16,7 @@ If you have any questions do not hesitate to contact us, we will be available to
 
 
 ## Calendar URL
-https://nicotrejos.github.io/
+https://TreLoymark.github.io/
 
 
 ## Tasks
