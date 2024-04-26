@@ -9,7 +9,8 @@ const main = document.getElementsByTagName('main')[0];
 
 // Customization variables
 var useMonthShort = false,
-	useDayShort = true;
+	useDayShort = true,
+	countryCode = "int";
 
 
 // Validation rules
@@ -97,6 +98,19 @@ function formatNames(type, useShort) {
 	// Return results
 	return arrayFinal;
 }
+
+function getMonthNumber(monthName) {
+    // Convert the input month name to lowercase for case insensitivity
+    const lowercaseMonthName = monthName.toLowerCase();
+
+    // Find the index of the lowercase month name in the array
+    const index = monthFull.findIndex(month => month.toLowerCase() === lowercaseMonthName);
+
+    // If the month name is found in the array, return its index + 1 (since month numbers start from 1)
+    // Otherwise, return null to indicate that the month name is not valid
+    return index !== -1 ? index : null;
+}
+
 /* Check if the day is a holiday
 If the country selected is not us or cr, use the international json file as default to check
 if the date is a holiday.
@@ -106,8 +120,8 @@ const HolidayData = {
 
     async init() {
         // Fetch holiday data for each country code and store it in local storage
-        const countryCodes = ['cr', 'us', 'int'];
-        for (const countryCode of countryCodes) {
+        const countryCodesList = ['cr', 'us', 'int'];
+        for (const countryCode of countryCodesList) {
             const storedData = localStorage.getItem(`holidayData_${countryCode}`);
             if (storedData) {
                 this.holidays[countryCode] = JSON.parse(storedData);
@@ -123,7 +137,8 @@ const HolidayData = {
         }
     },
 
-    isHoliday(countryCode, day, month) {
+    isHoliday(day, month) {
+		console.log("Country 2 code is ", countryCode, day, month)
         // If countryCode is not 'cr' or 'us', default to 'int'
         if (countryCode !== 'cr' && countryCode !== 'us') {
             countryCode = 'int';
@@ -139,6 +154,26 @@ const HolidayData = {
 
         // Check if the key exists in the holidays data for the specified country
         return this.holidays[countryCode]?.hasOwnProperty(key) ?? false;
+    },
+	getName(day, month) {
+        // If countryCode is not 'cr' or 'us', default to 'int'
+        if (countryCode !== 'cr' && countryCode !== 'us') {
+            countryCode = 'int';
+        }
+
+        // Check if holiday data is initialized for the specified countryCode
+        if (!this.holidays[countryCode]) {
+            throw new Error(`Holiday data for ${countryCode} is not initialized`);
+        }
+
+        // Construct the key for the given day and month
+        const key = `${day}/${month}`;
+
+        // Check if the key exists in the holidays data for the specified country
+        const holiday = this.holidays[countryCode][key];
+        
+        // If the holiday exists and has a name, return its name; otherwise, return null
+        return holiday && holiday.length > 0 ? holiday[0].name : null;
     }
 };
 
@@ -147,7 +182,7 @@ HolidayData.init();
 
 
 // Make calendar
-function makeCalendar(dateStart, dateLength, countryCode= "int") {
+function makeCalendar(dateStart, dateLength) {
 	// Parse dateLength value just to make sure we work with an integer
 	dateLength = parseInt(dateLength);
 
@@ -208,6 +243,7 @@ function makeCalendar(dateStart, dateLength, countryCode= "int") {
 		if ( !isLast ) {
 			var $month = document.getElementById(monthName[tempMonth] +  '_' + tempYear);
 			let $day_cell = document.createElement('li');
+			$day_cell.classList.add("within-range-day");
 			let $day_name = document.createElement('span');
 
 			// Add correct day number for new month structures
@@ -226,7 +262,7 @@ function makeCalendar(dateStart, dateLength, countryCode= "int") {
 				$day_cell.classList.add('today');
 			}
 			//check if is a holiday
-			if( HolidayData.isHoliday(countryCode,  tempDay + tempCount, tempMonth)){
+			if( HolidayData.isHoliday(tempDay + tempCount, tempMonth)){
 				$day_cell.classList.add('holiday');
 			}
 
@@ -288,6 +324,7 @@ function createNewMonth(curMonth, curYear) {
 	// Iterate on days of week
 	for (var j = 0; j < dayName.length; j++) {
 		let $day_cell = document.createElement('li');
+		$day_cell.classList.add("day")
 		let $day_name = document.createElement('span');
 
 		// Add day name
@@ -308,7 +345,6 @@ function createNewMonth(curMonth, curYear) {
 // Fill days on calendar before user selected date
 function addEmptyDaySpaces(year, month, length) {
 	var firstDay = firstDayOfMonth(year, month);
-	console.log(firstDay);
 	var monthId =  monthName[month] + '_' + year;
 	var $month = document.getElementById(monthId);
 	var loopLen = length;
@@ -365,6 +401,7 @@ function validateForm() {
   
 	formElem.addEventListener('submit', function(e) {
 		e.preventDefault();
+		countryCode = inputArray[2].value;
 
 		var errorsLen = 0, i = 0;
 
@@ -417,7 +454,7 @@ function validateForm() {
 			}
 
 			cal.scrollTop = 0;
-			makeCalendar(inputArray[0].value, inputArray[1].value, inputArray[2].value);
+			makeCalendar(inputArray[0].value, inputArray[1].value);
 
 		}
 
@@ -425,3 +462,31 @@ function validateForm() {
 }
 
 validateForm();
+
+/*
+Add event lister to holiday clicks 
+use event delegation
+*/
+const $calendarContainer = document.getElementById("calendar");
+
+$calendarContainer.addEventListener("click", (event) => {
+    // Check if the clicked element or its parent is an <li> element
+    const clickedDay = event.target.closest("li");
+    
+    if (clickedDay) {
+        // Check if the clicked <li> element has a class indicating a holiday
+        if (clickedDay.classList.contains("holiday")) {
+            // Traverse up the DOM tree to find the parent month container
+            const monthContainer = clickedDay.closest("div.month");
+            
+            if (monthContainer) {
+                // Extract the month information from the month container's title
+                const monthTitleElement = monthContainer.querySelector("h2.month_title");
+                const monthName = monthTitleElement.textContent.trim().split(" ")[0];
+				const monthNumber = getMonthNumber(monthName);
+				const dayNumber =  event.target.innerText;
+                alert(HolidayData.getName(dayNumber, monthNumber));
+            }
+        }
+    }
+});
