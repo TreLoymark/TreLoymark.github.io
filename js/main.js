@@ -22,6 +22,9 @@ const validations = {
 	},
 	daysLength: function(value) {
 		return value.match(/^([1-9][0-9]{0,2})$/);
+	},
+	countryCode: function(value){
+		return value.match(/^[a-zA-Z]{2}$/);
 	}
 };
 
@@ -29,7 +32,8 @@ const validations = {
 var messages = {
 	required: 'Required field',
 	dateFormat: 'Invalid date format. Please use mm/dd/yyyy',
-	daysLength: 'Use only numeric chacters between 1 and 999.'
+	daysLength: 'Use only numeric chacters between 1 and 999.',
+	countryCode: 'Please use a two-letter country code (e.g., "cr", "us", "uk").'
 }
 
 
@@ -93,6 +97,53 @@ function formatNames(type, useShort) {
 	// Return results
 	return arrayFinal;
 }
+/* Check if the day is a holiday
+If the country selected is not us or cr, use the international json file as default to check
+if the date is a holiday.
+*/
+async function isHoliday(countryCode, day, month) {
+    // Validate countryCode parameter
+    if (typeof countryCode !== 'string' || countryCode.length !== 2) {
+        throw new Error('Country code must be a string of length 2');
+    }
+
+    // Validate day and month parameters
+    if (!Number.isInteger(day) || day < 1 || day > 31) {
+        throw new Error('Invalid day value');
+    }
+
+    if (!Number.isInteger(month) || month < 1 || month > 12) {
+        throw new Error('Invalid month value');
+    }
+
+    // Determine the URL based on the country code
+    let url;
+    if (countryCode.toLowerCase() === 'us' || countryCode.toLowerCase() === 'cr') {
+        url = `./holidays/${countryCode.toLowerCase()}.json`;
+    } else {
+        url = './holidays/int.json'; // Use international file as default
+    }
+
+    try {
+        // Fetch JSON data from the URL
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error('Failed to fetch holiday data');
+        }
+
+        const holidays = await response.json();
+
+        // Construct the key for the given day and month
+        const key = `${day}/${month}`;
+
+        // Check if the key exists in the holidays data
+        return holidays.hasOwnProperty(key);
+    } catch (error) {
+        console.error('Error:', error.message);
+        throw error;
+    }
+}
+
 
 // Make calendar
 function makeCalendar(dateStart, dateLength) {
@@ -173,6 +224,7 @@ function makeCalendar(dateStart, dateLength) {
 			if ( dateString + '/' + tempYear === today ) {
 				$day_cell.classList.add('today');
 			}
+			//check if is a holiday
 
 			// Append day name to month table container
 			$day_cell.appendChild($day_name);
