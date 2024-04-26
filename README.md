@@ -45,5 +45,7 @@ https://TreLoymark.github.io/
 
 ## Use this space to list requirements you could not implement.
 
-
+I think I implemented all the requirements.
 ## Use this space to share bugs you’ve identified but didn’t have time to fix.
+
+I did not identified any further bugs that I didn't have time to fix but some layout problems regarding responsive design. 
