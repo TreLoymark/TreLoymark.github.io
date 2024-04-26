@@ -189,6 +189,9 @@ function makeCalendar(dateStart, dateLength) {
 	// Remove loading class after all days/months are rendered
 	window.setTimeout(function() {
 		cal.parentNode.classList.remove('loading');
+		//update the button text from "Show Calendar" to "Update Calendar". 
+		let $update_calendar_btn = document.getElementById('calendar-update');
+		$update_calendar_btn.innerText = 'Update Calendar';
 	}, 1500);
 }
 
@@ -249,6 +252,7 @@ function createNewMonth(curMonth, curYear) {
 // Fill days on calendar before user selected date
 function addEmptyDaySpaces(year, month, length) {
 	var firstDay = firstDayOfMonth(year, month);
+	console.log(firstDay);
 	var monthId =  monthName[month] + '_' + year;
 	var $month = document.getElementById(monthId);
 	var loopLen = length;
@@ -269,7 +273,6 @@ function addEmptyDaySpaces(year, month, length) {
 
 // Fill days on calendar after user input length
 function fillEmptyMonth(year, month, start, length) {
-	var firstDay = firstDayOfMonth(year, month);
 	var monthId =  monthName[month] + '_' + year;
 	var $month = document.getElementById(monthId);
 	var loopLen = length;
