@@ -227,12 +227,12 @@ function createNewMonth(curMonth, curYear) {
 	$month_wrapper.appendChild($days);
 
 	// Iterate on days of week
-	for (var i = 0; j < dayName.length; i++) {
+	for (var j = 0; j < dayName.length; j++) {
 		let $day_cell = document.createElement('li');
 		let $day_name = document.createElement('span');
 
 		// Add day name
-		$day_name.innerText = dayName[i];
+		$day_name.innerText = dayName[j];
 		// Append day name to list item
 		$day_cell.appendChild($day_name);
 		// Append list item to week row
