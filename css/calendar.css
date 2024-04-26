@@ -71,6 +71,10 @@
 .month ol > li.today {
 	background-color: #444444;
 }
+.month ul > li.holiday,
+.month ol > li.holiday {
+	background-color: #3d9438;
+}
 
 .month ul > li > span,
 .month ol > li > span {

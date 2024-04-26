@@ -101,52 +101,53 @@ function formatNames(type, useShort) {
 If the country selected is not us or cr, use the international json file as default to check
 if the date is a holiday.
 */
-async function isHoliday(countryCode, day, month) {
-    // Validate countryCode parameter
-    if (typeof countryCode !== 'string' || countryCode.length !== 2) {
-        throw new Error('Country code must be a string of length 2');
-    }
+const HolidayData = {
+    holidays: {},
 
-    // Validate day and month parameters
-    if (!Number.isInteger(day) || day < 1 || day > 31) {
-        throw new Error('Invalid day value');
-    }
+    async init() {
+        // Fetch holiday data for each country code and store it in local storage
+        const countryCodes = ['cr', 'us', 'int'];
+        for (const countryCode of countryCodes) {
+            const storedData = localStorage.getItem(`holidayData_${countryCode}`);
+            if (storedData) {
+                this.holidays[countryCode] = JSON.parse(storedData);
+            } else {
+                const response = await fetch(`./holidays/${countryCode}.json`);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch holiday data for ${countryCode}`);
+                }
+                const data = await response.json();
+                this.holidays[countryCode] = data;
+                localStorage.setItem(`holidayData_${countryCode}`, JSON.stringify(data));
+            }
+        }
+    },
 
-    if (!Number.isInteger(month) || month < 1 || month > 12) {
-        throw new Error('Invalid month value');
-    }
-
-    // Determine the URL based on the country code
-    let url;
-    if (countryCode.toLowerCase() === 'us' || countryCode.toLowerCase() === 'cr') {
-        url = `./holidays/${countryCode.toLowerCase()}.json`;
-    } else {
-        url = './holidays/int.json'; // Use international file as default
-    }
-
-    try {
-        // Fetch JSON data from the URL
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error('Failed to fetch holiday data');
+    isHoliday(countryCode, day, month) {
+        // If countryCode is not 'cr' or 'us', default to 'int'
+        if (countryCode !== 'cr' && countryCode !== 'us') {
+            countryCode = 'int';
         }
 
-        const holidays = await response.json();
+        // Check if holiday data is initialized for the specified countryCode
+        if (!this.holidays[countryCode]) {
+            throw new Error(`Holiday data for ${countryCode} is not initialized`);
+        }
 
         // Construct the key for the given day and month
         const key = `${day}/${month}`;
 
-        // Check if the key exists in the holidays data
-        return holidays.hasOwnProperty(key);
-    } catch (error) {
-        console.error('Error:', error.message);
-        throw error;
+        // Check if the key exists in the holidays data for the specified country
+        return this.holidays[countryCode]?.hasOwnProperty(key) ?? false;
     }
-}
+};
+
+// Initialize holiday data singleton
+HolidayData.init();
 
 
 // Make calendar
-function makeCalendar(dateStart, dateLength) {
+function makeCalendar(dateStart, dateLength, countryCode= "int") {
 	// Parse dateLength value just to make sure we work with an integer
 	dateLength = parseInt(dateLength);
 
@@ -157,7 +158,7 @@ function makeCalendar(dateStart, dateLength) {
 		startYear = parseInt(params[2]),
 		formatted = startYear + '/' + startMonth + '/' + startDay;
 
-	// Create new month structure
+		// Create new month structure
 	createNewMonth(startMonth, startYear);
 
 	// Define temporal variables for loop
@@ -225,6 +226,9 @@ function makeCalendar(dateStart, dateLength) {
 				$day_cell.classList.add('today');
 			}
 			//check if is a holiday
+			if( HolidayData.isHoliday(countryCode,  tempDay + tempCount, tempMonth)){
+				$day_cell.classList.add('holiday');
+			}
 
 			// Append day name to month table container
 			$day_cell.appendChild($day_name);
@@ -413,7 +417,8 @@ function validateForm() {
 			}
 
 			cal.scrollTop = 0;
-			makeCalendar(inputArray[0].value, inputArray[1].value);
+			makeCalendar(inputArray[0].value, inputArray[1].value, inputArray[2].value);
+
 		}
 
 	}, false);
