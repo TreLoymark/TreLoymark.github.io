@@ -53,10 +53,20 @@ var dayName;
 // Logic for country code toggle 
 let toggleCountryCode = document.getElementById('toggleCountryCode');
 let countryCodeBlock = document.getElementById('countryCodeBlock');
+let countryCodeInput = document.getElementById('countryCode');
 
-toggleCountryCode.addEventListener('change', () => {
+toggleCountryCode.addEventListener('change', (event) => {
 	debugger
-	toggleCountryCode.checked ? countryCodeBlock.style.display = 'block' : countryCodeBlock.style.display = 'none';
+	let target = event.currentTarget
+
+	target.checked ? countryCodeBlock.style.display = 'block' : countryCodeBlock.style.display = 'none';
+})
+
+// Validate and forma country code 
+countryCodeInput.addEventListener('input' , (event) => {
+	let target = event.currentTarget
+
+	target.value = target.value.toUpperCase().slice(0,2);
 })
 
 
