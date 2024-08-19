@@ -12,7 +12,7 @@ var useMonthShort = false,
 	useDayShort = true;
 
 
-// Validation rules
+// Validation rules  
 const validations = {
 	required: function(value) {
 		return value !== '';
