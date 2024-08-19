@@ -22,7 +22,7 @@ https://TreLoymark.github.io/
 ## Tasks
   - Debug and fix current rendering issue(s). // Done
   - Make sure the calendar is rendering user selected dates correctly. //Done
-  - Once the calendar has render, update the button text from "*Show Calendar*" to "*Update Calendar*".
+  - Once the calendar has render, update the button text from "*Show Calendar*" to "*Update Calendar*". // Done
   - Differentiate today's day using a different color (*HEX #444444*).
   - Allow the user to specify an extra input with a Country Code.
   - Validate the country code input to accept only 2 letter strings. Eg: us, cr, uk.

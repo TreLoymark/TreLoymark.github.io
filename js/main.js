@@ -190,6 +190,13 @@ function makeCalendar(dateStart, dateLength) {
 	window.setTimeout(function() {
 		cal.parentNode.classList.remove('loading');
 	}, 1500);
+
+	// Change text from calendar button 
+	document.getElementsByClassName('btn-blue')[0].innerHTML = "Update Calendar";
+	// Change te color of the current day 
+	document.getElementsByClassName('today')[0].style.backgroundColor = "#444444";
+	document.getElementsByClassName('today')[0].style.color = "#fff";
+
 }
 
 function createNewMonth(curMonth, curYear) {
