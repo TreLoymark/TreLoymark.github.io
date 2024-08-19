@@ -50,6 +50,16 @@ var dayName;
  *  Helpers
  */
 
+// Logic for country code toggle 
+let toggleCountryCode = document.getElementById('toggleCountryCode');
+let countryCodeBlock = document.getElementById('countryCodeBlock');
+
+toggleCountryCode.addEventListener('change', () => {
+	debugger
+	toggleCountryCode.checked ? countryCodeBlock.style.display = 'block' : countryCodeBlock.style.display = 'none';
+})
+
+
 
 // Get todays date formatted as dd/mm/yyyy
 function getTodayDate() {
