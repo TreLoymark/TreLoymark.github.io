@@ -102,9 +102,9 @@ function makeCalendar(dateStart, dateLength) {
 	// Split date to ensure expected formatting (dd/mm/yyyy)
 	var params = dateStart.split('/'),
 		startDay = parseInt(params[1]),
-		startMonth = parseInt(params[0] - 2),
+		startMonth = parseInt(params[0] - 1),
 		startYear = parseInt(params[2]),
-		formatted = startYear + '/' + startMonth + '/' + startDay;
+		formatted = startDay + '/' + startMonth + '/' + startYear;
 
 	// Create new month structure
 	createNewMonth(startMonth, startYear);
@@ -363,5 +363,5 @@ function validateForm() {
 
 	}, false);
 }
-
+debugger
 validateForm();
