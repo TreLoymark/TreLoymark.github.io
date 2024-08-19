@@ -24,7 +24,7 @@ https://TreLoymark.github.io/
   - Make sure the calendar is rendering user selected dates correctly. //Done
   - Once the calendar has render, update the button text from "*Show Calendar*" to "*Update Calendar*". // Done
   - Differentiate today's day using a different color (*HEX #444444*). //Done
-  - Allow the user to specify an extra input with a Country Code.
+  - Allow the user to specify an extra input with a Country Code.// Done
   - Validate the country code input to accept only 2 letter strings. Eg: us, cr, uk.
   - You will find 3 JSON files with holidays ready to use in this repo (*us.json, cr.json and int.json*).
   - Show all country selected holidays within the rendered dates.
