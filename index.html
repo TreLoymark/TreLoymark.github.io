@@ -42,6 +42,21 @@
 								<label for="dateLength">Number of days</label>
 							</p>
 
+							<!-- New check box to toggle the country code input -->
+							<p class="form-block">
+								<input type="checkbox" id="toggleCountryCode">
+								<label for="toggleCountryCode">
+									Add a country code?
+								</label>
+							</p>
+
+							<!-- Input to insert the country code -->
+							<p class="form-block" id="countryCodeBlock" style="display: block;">
+								<input type="text" name="countryCode" id="countryCode" data-validation="required">
+
+								<label for="countryCode">Country Code</label>
+							</p>
+
 							<button type="submit" class="btn-blue">Show Calendar</button>
 						</form>
 					</div>

@@ -193,7 +193,7 @@ function makeCalendar(dateStart, dateLength) {
 
 	// Change text from calendar button 
 	document.getElementsByClassName('btn-blue')[0].innerHTML = "Update Calendar";
-	// Change te color of the current day 
+	// Change the color and background color of the current day 
 	document.getElementsByClassName('today')[0].style.backgroundColor = "#444444";
 	document.getElementsByClassName('today')[0].style.color = "#fff";
 
