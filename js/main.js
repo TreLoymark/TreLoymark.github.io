@@ -43,7 +43,10 @@ var today = getTodayDate();
 var monthName = formatNames('month', useMonthShort);
 var dayName;
 
-
+// holly days
+let cr = []
+let int = []
+let us = []
 
 
 /*
@@ -69,7 +72,23 @@ countryCodeInput.addEventListener('input' , (event) => {
 	target.value = target.value.toUpperCase().slice(0,2);
 })
 
+// Function to json files
+function fetchData(file) {
+	fetch(file)
+		.then(response => {
+			if (!response.ok) {
+				throw new Error('Error while fetching data')
+			}
 
+			return response.json();
+		})
+		.then(data => {
+			const dataArray = Object.entries(data);
+			console.log(dataArray)
+			return dataArray
+		})
+		.catch(error => console.log(error))
+}
 
 // Get todays date formatted as dd/mm/yyyy
 function getTodayDate() {
@@ -387,6 +406,11 @@ function validateForm() {
 			cal.scrollTop = 0;
 			makeCalendar(inputArray[0].value, inputArray[1].value);
 		}
+
+		//loading the json files
+		cr = fetchData('./holidays/cr.json');
+		int = fetchData('./holidays/int.json');
+		us = fetchData('./holidays/us.json');
 
 	}, false);
 }
