@@ -44,6 +44,12 @@ https://TreLoymark.github.io/
 
 
 ## Use this space to list requirements you could not implement.
+ - Show all country selected holidays within the rendered dates.
+  - If the country selected is not us or cr, use the international json file as default.
+  - Differentiate holidays using a different color (*HEX #3d9438*).
+  - Show a simple js alerts with the holiday name whenever there's a click on a holiday calendar cell.
 
+  (I had some difficulties unrelated to the test while it was being carried out. However I am aware that I could have refactored the code better and taken more tim to read it)
 
 ## Use this space to share bugs you’ve identified but didn’t have time to fix.
+- Some variables are initialized but not used

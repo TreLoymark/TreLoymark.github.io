@@ -43,10 +43,6 @@ var today = getTodayDate();
 var monthName = formatNames('month', useMonthShort);
 var dayName;
 
-// holly days
-let cr = []
-let int = []
-let us = []
 
 
 /*
@@ -59,7 +55,6 @@ let countryCodeBlock = document.getElementById('countryCodeBlock');
 let countryCodeInput = document.getElementById('countryCode');
 
 toggleCountryCode.addEventListener('change', (event) => {
-	debugger
 	let target = event.currentTarget
 
 	target.checked ? countryCodeBlock.style.display = 'block' : countryCodeBlock.style.display = 'none';
@@ -72,7 +67,7 @@ countryCodeInput.addEventListener('input' , (event) => {
 	target.value = target.value.toUpperCase().slice(0,2);
 })
 
-// Function to json files
+// Function to fecht json files
 function fetchData(file) {
 	fetch(file)
 		.then(response => {
@@ -408,11 +403,11 @@ function validateForm() {
 		}
 
 		//loading the json files
-		cr = fetchData('./holidays/cr.json');
-		int = fetchData('./holidays/int.json');
-		us = fetchData('./holidays/us.json');
+		let cr = fetchData('./holidays/cr.json');
+		let int = fetchData('./holidays/int.json');
+		let us = fetchData('./holidays/us.json');
 
 	}, false);
 }
-debugger
+
 validateForm();
