@@ -27,9 +27,9 @@ https://TreLoymark.github.io/
   - Allow the user to specify an extra input with a Country Code.// Done
   - Validate the country code input to accept only 2 letter strings. Eg: us, cr, uk. // Done
   - You will find 3 JSON files with holidays ready to use in this repo (*us.json, cr.json and int.json*).
-  - Show all country selected holidays within the rendered dates.
-  - If the country selected is not us or cr, use the international json file as default.
-  - Differentiate holidays using a different color (*HEX #3d9438*).
+  - Show all country selected holidays within the rendered dates.//Done
+  - If the country selected is not us or cr, use the international json file as default.// Done
+  - Differentiate holidays using a different color (*HEX #3d9438*).// Done 
   - Show a simple js alerts with the holiday name whenever there's a click on a holiday calendar cell.
 
 

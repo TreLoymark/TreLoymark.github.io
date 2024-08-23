@@ -171,7 +171,16 @@ async function setHolidays() {
 };
 
 // Make calendar
-function makeCalendar(dateStart, dateLength) {
+async function makeCalendar(dateStart, dateLength) {
+
+	// Initialice arrHolidays
+	arrHolidays = await setHolidays();
+
+	const holidaysReduce = arrHolidays.reduce((acc, holiday) => {
+		acc[holiday.date] = holiday.title; 
+		return acc;
+	});
+
 	// Parse dateLength value just to make sure we work with an integer
 	dateLength = parseInt(dateLength);
 
@@ -248,6 +257,12 @@ function makeCalendar(dateStart, dateLength) {
 			// Check if day is today and add class name for styling purposes
 			if ( dateString + '/' + tempYear === today ) {
 				$day_cell.classList.add('today');
+			}
+
+			// Check if day is a hoiday
+			if ( holidaysReduce[`${$day_name.innerText}/${tempMonth}`]) {
+				$day_cell.classList.add('holiday');
+				$day_cell.title = holidaysReduce[`${$day_name.innerText}/${tempMonth}`]
 			}
 
 			// Append day name to month table container
