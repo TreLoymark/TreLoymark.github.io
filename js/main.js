@@ -7,6 +7,9 @@
 const cal = document.getElementById('calendar');
 const main = document.getElementsByTagName('main')[0];
 
+//
+const btn = document.getElementsByClassName('btn-blue')[0];
+
 // Customization variables
 var useMonthShort = false,
 	useDayShort = true;
@@ -68,21 +71,38 @@ countryCodeInput.addEventListener('input' , (event) => {
 })
 
 // Function to fecht json files
-function fetchData(file) {
-	fetch(file)
-		.then(response => {
-			if (!response.ok) {
-				throw new Error('Error while fetching data')
-			}
+async function fetchData(filePath) {
+	try {
 
-			return response.json();
-		})
-		.then(data => {
-			const dataArray = Object.entries(data);
-			console.log(dataArray)
-			return dataArray
-		})
-		.catch(error => console.log(error))
+		const response = await fetch(filePath);
+		
+		if (!response.ok) {
+			throw new Error(`Error while load the file: ${response.statusText}`);
+		}
+
+		const data = await response.json();
+
+		if (typeof data !== 'object' || Array.isArray(data)) {
+			throw new Error('The contect of the file is not a JSON object');
+		}
+
+		const dataArray = Object.entries(data);
+
+		// Create a new array for make a easies iteration of the data 
+		let newArray = dataArray.map(d => ({
+			date: d[0],
+			title: d[1][0].name
+		}));
+
+		return newArray;
+
+	} catch (error) {
+
+		console.log('Error during the execution', error);
+
+		return [];
+
+	}
 }
 
 // Get todays date formatted as dd/mm/yyyy
@@ -127,6 +147,28 @@ function formatNames(type, useShort) {
 	// Return results
 	return arrayFinal;
 }
+
+async function setHolidays() {
+	
+	let inpt_CountryCode = document.getElementById('countryCode').value;
+
+	var arrHolidays;
+
+	if ( inpt_CountryCode === 'CR') {
+		
+		return arrHolidays = await fetchData('./holidays/cr.json');
+
+	}
+
+	if ( inpt_CountryCode === 'US' ) {
+		
+		return arrHolidays = await fetchData('./holidays/cr.json');
+
+	}
+
+	return arrHolidays = await fetchData('./holidays/int.json');
+
+};
 
 // Make calendar
 function makeCalendar(dateStart, dateLength) {
@@ -226,11 +268,7 @@ function makeCalendar(dateStart, dateLength) {
 	}, 1500);
 
 	// Change text from calendar button 
-	document.getElementsByClassName('btn-blue')[0].innerHTML = "Update Calendar";
-	// Change the color and background color of the current day 
-	document.getElementsByClassName('today')[0].style.backgroundColor = "#444444";
-	document.getElementsByClassName('today')[0].style.color = "#fff";
-
+	btn.innerHTML = "Update Calendar";
 }
 
 function createNewMonth(curMonth, curYear) {
@@ -402,10 +440,10 @@ function validateForm() {
 			makeCalendar(inputArray[0].value, inputArray[1].value);
 		}
 
-		//loading the json files
+		/* //loading the json files
 		let cr = fetchData('./holidays/cr.json');
 		let int = fetchData('./holidays/int.json');
-		let us = fetchData('./holidays/us.json');
+		let us = fetchData('./holidays/us.json'); */
 
 	}, false);
 }
