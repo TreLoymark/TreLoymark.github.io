@@ -17,13 +17,13 @@ var useMonthShort = false,
 
 // Validation rules  
 const validations = {
-	required: function(value) {
+	required: function (value) {
 		return value !== '';
 	},
-	dateFormat: function(value) {
+	dateFormat: function (value) {
 		return value.match(/^((0[13578]|1[02])[\/|\-](0[1-9]|[12][0-9]|3[01])[\/|\-](18|19|20)[0-9]{2})|((0[469]|11)[\/|\-](0[1-9]|[12][0-9]|30)[\/|\-](18|19|20)[0-9]{2})|((02)[\/|\-](0[1-9]|1[0-9]|2[0-8])[\/|\-](18|19|20)[0-9]{2})|((02)[\/|\-]29[\/|\-](((18|19|20)(04|08|[2468][048]|[13579][26]))|2000))$/);
 	},
-	daysLength: function(value) {
+	daysLength: function (value) {
 		return value.match(/^([1-9][0-9]{0,2})$/);
 	}
 };
@@ -64,10 +64,10 @@ toggleCountryCode.addEventListener('change', (event) => {
 })
 
 // Validate and forma country code 
-countryCodeInput.addEventListener('input' , (event) => {
+countryCodeInput.addEventListener('input', (event) => {
 	let target = event.currentTarget
 
-	target.value = target.value.toUpperCase().slice(0,2);
+	target.value = target.value.toUpperCase().slice(0, 2);
 })
 
 // Function to fecht json files
@@ -75,7 +75,7 @@ async function fetchData(filePath) {
 	try {
 
 		const response = await fetch(filePath);
-		
+
 		if (!response.ok) {
 			throw new Error(`Error while load the file: ${response.statusText}`);
 		}
@@ -130,7 +130,7 @@ function formatNames(type, useShort) {
 		arrayFinal;
 
 	// If using short version of names
-	if ( useShort ) {
+	if (useShort) {
 		// Create a new empty array
 		arrayFinal = [];
 
@@ -138,7 +138,7 @@ function formatNames(type, useShort) {
 		for (var i = 0; i < arrayFull.length; i++) {
 			arrayFinal.push(arrayFull[i].substr(0, 3));
 		}
-	// If using full version of names
+		// If using full version of names
 	} else {
 		// Create a shallow copy of original
 		arrayFinal = arrayFull.slice();
@@ -150,19 +150,19 @@ function formatNames(type, useShort) {
 
 // Set holidays array based on input countryCode
 async function setHolidays() {
-	
+
 	let inpt_CountryCode = document.getElementById('countryCode').value;
 
 	var arrHolidays;
 
-	if ( inpt_CountryCode === 'CR') {
-		
+	if (inpt_CountryCode === 'CR') {
+
 		return arrHolidays = await fetchData('./holidays/cr.json');
 
 	}
 
-	if ( inpt_CountryCode === 'US' ) {
-		
+	if (inpt_CountryCode === 'US') {
+
 		return arrHolidays = await fetchData('./holidays/us.json');
 
 	}
@@ -173,15 +173,19 @@ async function setHolidays() {
 
 // Create event and alert for holidays
 function markedHolidays() {
-	
+
 	let holidays = document.querySelectorAll('.holiday');
 
-	holidays.forEach( (h) => { 
+	holidays.forEach((h) => {
+
 		h.addEventListener('click', (e) => {
+
 			document.getElementById('countryCode').value === 'CR' ? alert(`En este día se celebra "${e.currentTarget.title}"`) : alert(`This day we celebrate "${e.currentTarget.title}"`);
+
 		});
+
 	})
-}
+};
 
 // Make calendar
 async function makeCalendar(dateStart, dateLength) {
@@ -190,7 +194,7 @@ async function makeCalendar(dateStart, dateLength) {
 	arrHolidays = await setHolidays();
 
 	const holidaysReduce = arrHolidays.reduce((acc, holiday) => {
-		acc[holiday.date] = holiday.title; 
+		acc[holiday.date] = holiday.title;
 		return acc;
 	});
 
@@ -215,44 +219,44 @@ async function makeCalendar(dateStart, dateLength) {
 		var isLast = (j === dateLength);
 
 		// First iteration (staring day)
-		if ( j === 0 ) {
-			tempDay		= startDay;
-			tempMonth	= startMonth;
-			tempYear	= startYear;
-			monthLimit	= totalDaysInMonth(tempYear, tempMonth);
-			firstDay	= firstDayOfMonth(tempYear, tempMonth);
+		if (j === 0) {
+			tempDay = startDay;
+			tempMonth = startMonth;
+			tempYear = startYear;
+			monthLimit = totalDaysInMonth(tempYear, tempMonth);
+			firstDay = firstDayOfMonth(tempYear, tempMonth);
 
 			// Fix empty spaces array iteration length if week starts on monday
 			var loopLen = tempDay - 1;
 
 			// Add all invalid day spaces before start date
 			addEmptyDaySpaces(tempYear, tempMonth, loopLen);
-		// Current day number exceeds month total days
-		} else if ( tempDay + tempCount > monthLimit && !isLast ) {
+			// Current day number exceeds month total days
+		} else if (tempDay + tempCount > monthLimit && !isLast) {
 			// Reset temporal day counts
-			tempCount	= 0;
-			tempDay		= 1;
+			tempCount = 0;
+			tempDay = 1;
 
 			// Reset temporal month and increment by one temporal year variable
 			// if current month exceeds maximum amount of months in a year (11 > December)
-			if ( tempMonth === 11 ) {
+			if (tempMonth === 11) {
 				tempYear = tempYear + 1;
 				tempMonth = 0;
-			// else, increment temporal month variable by one
+				// else, increment temporal month variable by one
 			} else {
 				tempMonth = tempMonth + 1;
 			}
 
 			// Reset month limits and get new month's first day
-			monthLimit	= totalDaysInMonth(tempYear, tempMonth);
-			firstDay	= firstDayOfMonth(tempYear, tempMonth);
+			monthLimit = totalDaysInMonth(tempYear, tempMonth);
+			firstDay = firstDayOfMonth(tempYear, tempMonth);
 
 			// Create new month structure
 			createNewMonth(tempMonth, tempYear);
 		}
 
-		if ( !isLast ) {
-			var $month = document.getElementById(monthName[tempMonth] +  '_' + tempYear);
+		if (!isLast) {
+			var $month = document.getElementById(monthName[tempMonth] + '_' + tempYear);
 			let $day_cell = document.createElement('li');
 			let $day_name = document.createElement('span');
 
@@ -263,18 +267,18 @@ async function makeCalendar(dateStart, dateLength) {
 				dateString = (tempDay + tempCount) + '/' + tempMonth;
 
 			// Check if day is weekend and add class name for styling purposes
-			if ( weekend % 7 === 0 || (weekend + 1) % 7 === 0) {
+			if (weekend % 7 === 0 || (weekend + 1) % 7 === 0) {
 				$day_cell.classList.add('weekend');
 			}
 
 			// Check if day is today and add class name for styling purposes
-			if ( dateString + '/' + tempYear === today ) {
+			if (dateString + '/' + tempYear === today) {
 				$day_cell.classList.add('today');
 				document.getElementById('countryCode').value === 'CR' ? $day_cell.title = "Día actual" : $day_cell.title = "Today's day";
 			}
 
 			// Check if day is a hoiday
-			if ( holidaysReduce[`${$day_name.innerText}/${tempMonth}`]) {
+			if (holidaysReduce[`${$day_name.innerText}/${tempMonth}`]) {
 				$day_cell.classList.add('holiday');
 				$day_cell.title = holidaysReduce[`${$day_name.innerText}/${tempMonth}`];
 			}
@@ -292,7 +296,7 @@ async function makeCalendar(dateStart, dateLength) {
 	}
 
 	// Remove loading class after all days/months are rendered
-	window.setTimeout(function() {
+	window.setTimeout(function () {
 		cal.parentNode.classList.remove('loading');
 		markedHolidays();
 	}, 1500);
@@ -307,7 +311,7 @@ function createNewMonth(curMonth, curYear) {
 	let $month_wrapper = document.createElement('div');
 
 	// Add month wrapper class based on version of week day names (full || short)
-	$month_wrapper.className = ( !useDayShort ) ? 'month big' : 'month';
+	$month_wrapper.className = (!useDayShort) ? 'month big' : 'month';
 
 	// Append month wrapper to calendar
 	cal.appendChild($month_wrapper);
@@ -326,7 +330,7 @@ function createNewMonth(curMonth, curYear) {
 
 	// Create day numbers container
 	let $days = document.createElement('ol');
-	var monthId =  monthName[curMonth] + '_' + curYear;
+	var monthId = monthName[curMonth] + '_' + curYear;
 	$days.id = monthId;
 	$days.className = 'week_days';
 
@@ -358,7 +362,7 @@ function createNewMonth(curMonth, curYear) {
 // Fill days on calendar before user selected date
 function addEmptyDaySpaces(year, month, length) {
 	var firstDay = firstDayOfMonth(year, month);
-	var monthId =  monthName[month] + '_' + year;
+	var monthId = monthName[month] + '_' + year;
 	var $month = document.getElementById(monthId);
 	var loopLen = length;
 
@@ -379,7 +383,7 @@ function addEmptyDaySpaces(year, month, length) {
 // Fill days on calendar after user input length
 function fillEmptyMonth(year, month, start, length) {
 	var firstDay = firstDayOfMonth(year, month);
-	var monthId =  monthName[month] + '_' + year;
+	var monthId = monthName[month] + '_' + year;
 	var $month = document.getElementById(monthId);
 	var loopLen = length;
 
@@ -404,16 +408,16 @@ function validateForm() {
 
 	// Add classname 'used' if input has a value
 	for (var k = 0; k < inputArray.length; k++) {
-		inputArray[k].addEventListener('blur', function(e) {
-			if ( !this.value ) {
+		inputArray[k].addEventListener('blur', function (e) {
+			if (!this.value) {
 				this.classList.remove('used');
 			} else {
 				this.classList.add('used');
 			}
 		});
 	}
-  
-	formElem.addEventListener('submit', function(e) {
+
+	formElem.addEventListener('submit', function (e) {
 		e.preventDefault();
 
 		var errorsLen = 0, i = 0;
@@ -428,10 +432,10 @@ function validateForm() {
 				var inputName = inputArray[i].getAttribute('name'),
 					elError = document.getElementById(inputName + '-error');
 
-				if ( !validations[rules[j]](inputArray[i].value) ) {
+				if (!validations[rules[j]](inputArray[i].value)) {
 					e.preventDefault();
 
-					if ( !elError ) {
+					if (!elError) {
 						elError = document.createElement('span');
 						elError.id = inputName + '-error';
 						elError.classList.add('error');
@@ -445,7 +449,7 @@ function validateForm() {
 
 					break;
 				} else {
-					if ( elError ) {
+					if (elError) {
 						elError.parentNode.removeChild(elError);
 					}
 
@@ -458,22 +462,17 @@ function validateForm() {
 			i++;
 		}
 
-		if ( !errorsLen ) {
+		if (!errorsLen) {
 			main.classList.add('with-data');
 			cal.parentNode.classList.add('loading');
 
-			while ( cal.hasChildNodes() ) {
+			while (cal.hasChildNodes()) {
 				cal.removeChild(cal.lastChild);
 			}
 
 			cal.scrollTop = 0;
 			makeCalendar(inputArray[0].value, inputArray[1].value);
 		}
-
-		/* //loading the json files
-		let cr = fetchData('./holidays/cr.json');
-		let int = fetchData('./holidays/int.json');
-		let us = fetchData('./holidays/us.json'); */
 
 	}, false);
 }
