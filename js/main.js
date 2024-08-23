@@ -148,6 +148,7 @@ function formatNames(type, useShort) {
 	return arrayFinal;
 }
 
+// Set holidays array based on input countryCode
 async function setHolidays() {
 	
 	let inpt_CountryCode = document.getElementById('countryCode').value;
@@ -162,13 +163,25 @@ async function setHolidays() {
 
 	if ( inpt_CountryCode === 'US' ) {
 		
-		return arrHolidays = await fetchData('./holidays/cr.json');
+		return arrHolidays = await fetchData('./holidays/us.json');
 
 	}
 
 	return arrHolidays = await fetchData('./holidays/int.json');
 
 };
+
+// Create event and alert for holidays
+function markedHolidays() {
+	
+	let holidays = document.querySelectorAll('.holiday');
+
+	holidays.forEach( (h) => { 
+		h.addEventListener('click', (e) => {
+			document.getElementById('countryCode').value === 'CR' ? alert(`En este día se celebra "${e.currentTarget.title}"`) : alert(`This day we celebrate "${e.currentTarget.title}"`);
+		});
+	})
+}
 
 // Make calendar
 async function makeCalendar(dateStart, dateLength) {
@@ -257,12 +270,13 @@ async function makeCalendar(dateStart, dateLength) {
 			// Check if day is today and add class name for styling purposes
 			if ( dateString + '/' + tempYear === today ) {
 				$day_cell.classList.add('today');
+				document.getElementById('countryCode').value === 'CR' ? $day_cell.title = "Día actual" : $day_cell.title = "Today's day";
 			}
 
 			// Check if day is a hoiday
 			if ( holidaysReduce[`${$day_name.innerText}/${tempMonth}`]) {
 				$day_cell.classList.add('holiday');
-				$day_cell.title = holidaysReduce[`${$day_name.innerText}/${tempMonth}`]
+				$day_cell.title = holidaysReduce[`${$day_name.innerText}/${tempMonth}`];
 			}
 
 			// Append day name to month table container
@@ -280,6 +294,7 @@ async function makeCalendar(dateStart, dateLength) {
 	// Remove loading class after all days/months are rendered
 	window.setTimeout(function() {
 		cal.parentNode.classList.remove('loading');
+		markedHolidays();
 	}, 1500);
 
 	// Change text from calendar button 
