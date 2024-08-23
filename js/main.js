@@ -7,12 +7,9 @@
 const cal = document.getElementById('calendar');
 const main = document.getElementsByTagName('main')[0];
 
-<<<<<<< HEAD
 //
 const btn = document.getElementsByClassName('btn-blue')[0];
 
-=======
->>>>>>> 08796ee6faab03078c931003719741cd86b4d8aa
 // Customization variables
 var useMonthShort = false,
 	useDayShort = true;
@@ -74,7 +71,6 @@ countryCodeInput.addEventListener('input' , (event) => {
 })
 
 // Function to fecht json files
-<<<<<<< HEAD
 async function fetchData(filePath) {
 	try {
 
@@ -107,23 +103,6 @@ async function fetchData(filePath) {
 		return [];
 
 	}
-=======
-function fetchData(file) {
-	fetch(file)
-		.then(response => {
-			if (!response.ok) {
-				throw new Error('Error while fetching data')
-			}
-
-			return response.json();
-		})
-		.then(data => {
-			const dataArray = Object.entries(data);
-			console.log(dataArray)
-			return dataArray
-		})
-		.catch(error => console.log(error))
->>>>>>> 08796ee6faab03078c931003719741cd86b4d8aa
 }
 
 // Get todays date formatted as dd/mm/yyyy
@@ -169,7 +148,6 @@ function formatNames(type, useShort) {
 	return arrayFinal;
 }
 
-<<<<<<< HEAD
 async function setHolidays() {
 	
 	let inpt_CountryCode = document.getElementById('countryCode').value;
@@ -192,8 +170,6 @@ async function setHolidays() {
 
 };
 
-=======
->>>>>>> 08796ee6faab03078c931003719741cd86b4d8aa
 // Make calendar
 function makeCalendar(dateStart, dateLength) {
 	// Parse dateLength value just to make sure we work with an integer
@@ -292,15 +268,7 @@ function makeCalendar(dateStart, dateLength) {
 	}, 1500);
 
 	// Change text from calendar button 
-<<<<<<< HEAD
 	btn.innerHTML = "Update Calendar";
-=======
-	document.getElementsByClassName('btn-blue')[0].innerHTML = "Update Calendar";
-	// Change the color and background color of the current day 
-	document.getElementsByClassName('today')[0].style.backgroundColor = "#444444";
-	document.getElementsByClassName('today')[0].style.color = "#fff";
-
->>>>>>> 08796ee6faab03078c931003719741cd86b4d8aa
 }
 
 function createNewMonth(curMonth, curYear) {
@@ -472,17 +440,10 @@ function validateForm() {
 			makeCalendar(inputArray[0].value, inputArray[1].value);
 		}
 
-<<<<<<< HEAD
 		/* //loading the json files
 		let cr = fetchData('./holidays/cr.json');
 		let int = fetchData('./holidays/int.json');
 		let us = fetchData('./holidays/us.json'); */
-=======
-		//loading the json files
-		let cr = fetchData('./holidays/cr.json');
-		let int = fetchData('./holidays/int.json');
-		let us = fetchData('./holidays/us.json');
->>>>>>> 08796ee6faab03078c931003719741cd86b4d8aa
 
 	}, false);
 }
