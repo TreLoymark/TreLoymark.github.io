@@ -22,6 +22,7 @@ const products = [
   },
 ];
 
+// LocalStorage
 const storage = {
   set: (key, value) => localStorage.setItem(key, JSON.stringify(value)),
   get: (key) => {
@@ -32,7 +33,18 @@ const storage = {
     }
   },
 };
-// Constants
+
+// DOM Elements
+const container = document.getElementById("product-list");
+const categorySelect = document.getElementById("categoryFilter");
+const sortSelect = document.getElementById("priceSort");
+const modal = document.getElementById("productModal");
+const modalBody = document.getElementById("modalBody");
+const modalClose = document.getElementById("modalClose");
+const cartDisplay = document.getElementById("cart-count");
+const btn = document.getElementById("toggle-darkmode");
+
+// HTML generador
 const getProductHTML = (product, withButton = false) => `
   <h2>${product.name}</h2>
   <p><strong>Price:</strong> $${product.price}</p>
@@ -45,25 +57,24 @@ const getProductHTML = (product, withButton = false) => `
   }
 `;
 
-const container = document.getElementById("product-list");
-const categorySelect = document.getElementById("categoryFilter");
-const sortSelect = document.getElementById("priceSort");
-const modal = document.getElementById("productModal");
-const modalBody = document.getElementById("modalBody");
-const modalClose = document.getElementById("modalClose");
-const cartDisplay = document.getElementById("cart-count");
+// Dark Mode
+const updateDarkModeUI = () => {
+  const dark = document.body.classList.contains("dark-mode");
+  btn.textContent = dark ? "☀️ Light Mode" : "🌙 Dark Mode";
+  storage.set("darkMode", dark);
+};
 
-// Fill select with the categories
-const categories = [...new Set(products.map((product) => product.category))];
+btn.onclick = () => {
+  document.body.classList.toggle("dark-mode");
+  updateDarkModeUI();
+};
 
-categories.forEach((category) => {
-  const option = document.createElement("option");
-  option.value = category;
-  option.textContent = category;
-  categorySelect.appendChild(option);
-});
+if (storage.get("darkMode")) {
+  document.body.classList.add("dark-mode");
+  updateDarkModeUI();
+}
 
-// Render the products in the DOM
+// Product render
 const renderProducts = (list) => {
   container.innerHTML = "";
   list.forEach((product) => {
@@ -71,39 +82,35 @@ const renderProducts = (list) => {
     card.innerHTML = getProductHTML(product, true);
 
     card.addEventListener("click", (e) => {
-      if (!e.target.classList.contains("add-to-cart")) {
-        openModal(product);
-      }
+      if (!e.target.classList.contains("add-to-cart")) openModal(product);
     });
 
     const addBtn = card.querySelector(".add-to-cart");
     let cartCount = storage.get("cartCount") || 0;
-    cartDisplay.textContent = `🛒 ${cartCount}`;
+    cartDisplay.innerHTML = `🛒 <span class="counter">${cartCount}</span>`;
     addBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-
       cartCount++;
       storage.set("cartCount", cartCount);
-      cartDisplay.textContent = `🛒 ${cartCount}`;
+      cartDisplay.innerHTML = `🛒 <span class="counter">${cartCount}</span>`;
     });
 
     container.appendChild(card);
   });
 };
 
+// Modal
 const openModal = (product) => {
   modalBody.innerHTML = getProductHTML(product, false);
   modal.classList.remove("hidden");
 };
 
 const closeModal = () => modal.classList.add("hidden");
-
 modalClose.onclick = closeModal;
 window.onclick = (e) => e.target === modal && closeModal();
-window.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") closeModal();
-});
+window.addEventListener("keydown", (e) => e.key === "Escape" && closeModal());
 
+// Filters
 const applyFilterAndSort = () => {
   const selectedCategory = categorySelect.value;
   const selectedSort = sortSelect.value;
@@ -122,10 +129,20 @@ const applyFilterAndSort = () => {
   renderProducts(result);
 };
 
+// Filter events
 categorySelect.addEventListener("change", applyFilterAndSort);
 sortSelect.addEventListener("change", applyFilterAndSort);
 
-// aply local storage
+// Select for categories
+const categories = [...new Set(products.map((p) => p.category))];
+categories.forEach((category) => {
+  const option = document.createElement("option");
+  option.value = category;
+  option.textContent = category;
+  categorySelect.appendChild(option);
+});
+
+// aply filters and initial render
 categorySelect.value = storage.get("selectedCategory") || "all";
 sortSelect.value = storage.get("selectedSort") || "none";
 applyFilterAndSort();

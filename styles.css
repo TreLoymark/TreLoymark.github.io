@@ -5,12 +5,14 @@ html {
   margin: 0;
   padding: 0;
 }
+
 header {
   padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .product-container {
   display: flex;
   flex-wrap: wrap;
@@ -18,8 +20,7 @@ header {
   justify-content: space-between;
 }
 
-.product-container > div {
-  background: white;
+.product-container>div {
   padding: 1rem;
   border-radius: 8px;
   border: solid 1px #ccc;
@@ -27,7 +28,8 @@ header {
   cursor: pointer;
   width: 32%;
 }
-.filter{
+
+.filter {
   margin-bottom: 20px;
   text-align: center;
 }
@@ -65,13 +67,62 @@ header {
 .hidden {
   display: none;
 }
+
+#cart-count {
+  position: relative;
+}
+
+.counter {
+  width: 20px;
+  height: 20px;
+  font-size: 13px;
+  color: #fff;
+  background: red;
+  padding: 6px;
+  border-radius: 100%;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+button.add-to-cart{
+  border: none;
+  padding: 10px 20px;
+  background: red;
+  color: #fff;
+  cursor: pointer;
+}
+
+#toggle-darkmode{
+  padding: 10px;
+  border: none;
+  background: #282828;
+  color: #fff;
+  cursor: pointer;
+}
+body.dark-mode #toggle-darkmode{
+  padding: 10px;
+  border: none;
+  background: #f2f2f2;
+  color: #000;
+}
+
+body.dark-mode {
+  background-color: #121212;
+}
+
+body.dark-mode h1, body.dark-mode h2, body.dark-mode p, body.dark-mode span,body.dark-mode {
+  color: #ffffff;
+}
 @media (max-width: 768px) {
   .product-container {
     flex-direction: column;
     align-items: center;
   }
 
-  .product-container > div {
+  .product-container>div {
     max-width: 90%;
     width: 100%;
   }
