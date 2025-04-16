@@ -14,8 +14,8 @@ header {
 .product-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
-  justify-content: center;
+  gap: 0.5rem;
+  justify-content: space-between;
 }
 
 .product-container > div {
@@ -23,14 +23,49 @@ header {
   padding: 1rem;
   border-radius: 8px;
   border: solid 1px #ccc;
-  max-width: 300px;
   box-sizing: border-box;
+  cursor: pointer;
+  width: 32%;
 }
 .filter{
   margin-bottom: 20px;
   text-align: center;
 }
-@media (max-width: 600px) {
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 90%;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  right: 1rem;
+  top: 0.5rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+@media (max-width: 768px) {
   .product-container {
     flex-direction: column;
     align-items: center;
