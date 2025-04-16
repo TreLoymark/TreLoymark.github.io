@@ -26,7 +26,10 @@ header {
   max-width: 300px;
   box-sizing: border-box;
 }
-
+.filter{
+  margin-bottom: 20px;
+  text-align: center;
+}
 @media (max-width: 600px) {
   .product-container {
     flex-direction: column;
